@@ -97,8 +97,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      child: BluePrint(
-        noPadding: true,
+      child: BaseView(
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

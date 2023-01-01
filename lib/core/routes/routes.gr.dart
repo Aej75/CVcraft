@@ -11,63 +11,76 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i4;
-import 'package:flutter/material.dart' as _i5;
+import 'package:auto_route/auto_route.dart' as _i5;
+import 'package:flutter/material.dart' as _i6;
 
-import '../../features/dashboard/presentation/pages/edit_templet_page.dart'
+import '../../features/dashboard/presentation/pages/forms/personal_details.dart'
     as _i3;
+import '../../features/dashboard/presentation/pages/forms/resume_objectives.dart'
+    as _i4;
 import '../../features/dashboard/presentation/pages/homepage.dart' as _i2;
 import '../../features/onboarding/presentation/pages/onboarding.dart' as _i1;
 
-class AppRouter extends _i4.RootStackRouter {
-  AppRouter([_i5.GlobalKey<_i5.NavigatorState>? navigatorKey])
+class AppRouter extends _i5.RootStackRouter {
+  AppRouter([_i6.GlobalKey<_i6.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i4.PageFactory> pagesMap = {
+  final Map<String, _i5.PageFactory> pagesMap = {
     OnboardingPageRoute.name: (routeData) {
-      return _i4.AdaptivePage<dynamic>(
+      return _i5.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i1.OnboardingPage(),
         opaque: true,
       );
     },
     HomePageRoute.name: (routeData) {
-      return _i4.AdaptivePage<dynamic>(
+      return _i5.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i2.HomePage(),
         opaque: true,
       );
     },
     EditTempletPageRoute.name: (routeData) {
-      return _i4.AdaptivePage<dynamic>(
+      return _i5.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i3.EditTempletPage(),
+        opaque: true,
+      );
+    },
+    ResumeObjectiveRoute.name: (routeData) {
+      return _i5.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i4.ResumeObjective(),
         opaque: true,
       );
     },
   };
 
   @override
-  List<_i4.RouteConfig> get routes => [
-        _i4.RouteConfig(
+  List<_i5.RouteConfig> get routes => [
+        _i5.RouteConfig(
           OnboardingPageRoute.name,
           path: '/',
         ),
-        _i4.RouteConfig(
+        _i5.RouteConfig(
           HomePageRoute.name,
           path: '/home-page',
         ),
-        _i4.RouteConfig(
+        _i5.RouteConfig(
           EditTempletPageRoute.name,
           path: '/edit-templet-page',
+        ),
+        _i5.RouteConfig(
+          ResumeObjectiveRoute.name,
+          path: '/resume-objective',
         ),
       ];
 }
 
 /// generated route for
 /// [_i1.OnboardingPage]
-class OnboardingPageRoute extends _i4.PageRouteInfo<void> {
+class OnboardingPageRoute extends _i5.PageRouteInfo<void> {
   const OnboardingPageRoute()
       : super(
           OnboardingPageRoute.name,
@@ -79,7 +92,7 @@ class OnboardingPageRoute extends _i4.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.HomePage]
-class HomePageRoute extends _i4.PageRouteInfo<void> {
+class HomePageRoute extends _i5.PageRouteInfo<void> {
   const HomePageRoute()
       : super(
           HomePageRoute.name,
@@ -91,7 +104,7 @@ class HomePageRoute extends _i4.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.EditTempletPage]
-class EditTempletPageRoute extends _i4.PageRouteInfo<void> {
+class EditTempletPageRoute extends _i5.PageRouteInfo<void> {
   const EditTempletPageRoute()
       : super(
           EditTempletPageRoute.name,
@@ -99,4 +112,16 @@ class EditTempletPageRoute extends _i4.PageRouteInfo<void> {
         );
 
   static const String name = 'EditTempletPageRoute';
+}
+
+/// generated route for
+/// [_i4.ResumeObjective]
+class ResumeObjectiveRoute extends _i5.PageRouteInfo<void> {
+  const ResumeObjectiveRoute()
+      : super(
+          ResumeObjectiveRoute.name,
+          path: '/resume-objective',
+        );
+
+  static const String name = 'ResumeObjectiveRoute';
 }
