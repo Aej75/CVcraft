@@ -68,7 +68,9 @@ class _EditTempletPageState extends State<EditTempletPage> {
                 ),
                 TopButton(
                   icon: Icons.arrow_forward_ios_rounded,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.router.push(const ResumeObjectiveRoute());
+                  },
                 ),
               ],
             ),

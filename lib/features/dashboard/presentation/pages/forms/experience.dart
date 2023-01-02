@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../../../core/routes/routes.gr.dart';
 import '../../../../../core/widgets/top_button.dart';
 
-class ResumeObjective extends StatelessWidget {
-  const ResumeObjective({super.key});
+class ExperiencePage extends StatelessWidget {
+  const ExperiencePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,20 +36,26 @@ class ResumeObjective extends StatelessWidget {
             child: const Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
-                'Resume\nObjectives',
+                'Experience',
                 style: TextStyle(fontSize: 55, fontWeight: FontWeight.w600),
               ),
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 3,
-            child: TextFormField(
-              // keyboardType: TextInputType.multiline,
-              maxLines: 7,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Resume objective/summary'),
-            ),
+          TextFormField(
+            // keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(), hintText: 'Organization Name'),
+          ),
+          TextFormField(
+            // keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(), hintText: 'Your title/position'),
+          ),
+          TextFormField(
+            maxLines: 5,
+            // keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(), hintText: 'Achivement'),
           ),
           const SizedBox(height: 70),
           Align(
