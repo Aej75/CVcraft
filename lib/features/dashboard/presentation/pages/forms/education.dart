@@ -8,14 +8,14 @@ import '../../../../../core/routes/routes.gr.dart';
 import '../../../../../core/widgets/roundBotton.dart';
 import '../../../../../core/widgets/top_button.dart';
 
-class ExperiencePage extends StatefulWidget {
-  const ExperiencePage({super.key});
+class EducationPage extends StatefulWidget {
+  const EducationPage({super.key});
 
   @override
-  State<ExperiencePage> createState() => _ExperiencePageState();
+  State<EducationPage> createState() => _EducationPageState();
 }
 
-class _ExperiencePageState extends State<ExperiencePage> {
+class _EducationPageState extends State<EducationPage> {
   int number = 1;
   List<String> count = [];
 
@@ -29,8 +29,8 @@ class _ExperiencePageState extends State<ExperiencePage> {
   Future getCount() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final List<String>? items = prefs.getStringList('experienceList');
-    prefs.remove('experienceList');
+    final List<String>? items = prefs.getStringList('educationList');
+    prefs.remove('educationList');
     if (items == null) {
       setState(() {
         count.add(number.toString());
@@ -63,7 +63,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
               TopButton(
                 icon: Icons.arrow_forward_ios_rounded,
                 onPressed: () {
-                  context.router.push(const EducationPageRoute());
+                  context.router.push(const SkillsRoute());
                 },
               ),
             ],
@@ -73,7 +73,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
             child: const Align(
               alignment: AlignmentDirectional.centerStart,
               child: Text(
-                'Experience',
+                'Education',
                 style: TextStyle(fontSize: 55, fontWeight: FontWeight.w600),
               ),
             ),
@@ -88,7 +88,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
                       viewportFraction: 0.9,
                       aspectRatio: 16 / 9,
                       enableInfiniteScroll: false,
-                      height: MediaQuery.of(context).size.height / 2.5,
+                      height: MediaQuery.of(context).size.height / 3.5,
                       onPageChanged: (index, reason) {
                         setState(() {
                           _current = index;
@@ -98,27 +98,25 @@ class _ExperiencePageState extends State<ExperiencePage> {
                       .map((e) => Card(
                             elevation: 5,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 TextFormField(
                                   // keyboardType: TextInputType.multiline,
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'Organization Name'),
+                                      hintText: 'Education institute name'),
                                 ),
                                 TextFormField(
                                   // keyboardType: TextInputType.multiline,
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'Your title/position'),
+                                      hintText: 'Module/ Course'),
                                 ),
                                 TextFormField(
-                                  maxLines: 5,
-
                                   // keyboardType: TextInputType.multiline,
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'Achivement'),
+                                      hintText: 'Location'),
                                 ),
                               ],
                             ),
@@ -128,7 +126,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
               RoundButton(
                 onPressed: () async {
                   final prefs = await SharedPreferences.getInstance();
-                  List<String>? items = prefs.getStringList('experienceList');
+                  List<String>? items = prefs.getStringList('educationList');
 
                   int totalItems = items == null ? 2 : items.length + 1;
 
@@ -137,7 +135,7 @@ class _ExperiencePageState extends State<ExperiencePage> {
                     count.add(number.toString());
                     print(count);
                   });
-                  await prefs.setStringList('experienceList', count);
+                  await prefs.setStringList('educationList', count);
                 },
               ),
               const SizedBox(height: 70),

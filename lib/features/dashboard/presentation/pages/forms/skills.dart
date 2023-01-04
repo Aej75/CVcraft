@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cv_app/core/routes/routes.gr.dart';
 import 'package:cv_app/core/widgets/blueprint.dart';
+import 'package:cv_app/core/widgets/roundBotton.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/widgets/top_button.dart';
 
@@ -12,12 +14,36 @@ class Skills extends StatefulWidget {
   State<Skills> createState() => _SkillsState();
 }
 
-class _SkillsState extends State<Skills> with AutomaticKeepAliveClientMixin {
-  int number = 4;
-  List<int> count = [1, 2, 3, 4];
+class _SkillsState extends State<Skills> {
+  int number = 1;
+  List<String> count = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCount();
+  }
+
+  Future getCount() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final List<String>? items = prefs.getStringList('count');
+
+   
+    if (items!.isEmpty) {
+      setState(() {
+        count.add(number.toString());
+      });
+    } else {
+      setState(() {
+        count = items;
+        print(count);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BaseView(
         body: SingleChildScrollView(
       child: Column(
@@ -60,8 +86,36 @@ class _SkillsState extends State<Skills> with AutomaticKeepAliveClientMixin {
                             children: [
                               TextFormField(
                                 decoration: InputDecoration(
+                                    suffixIcon: TextButton(
+                                        onPressed: () async {
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          List<String>? items =
+                                              prefs.getStringList('count');
+
+                                          setState(() {
+                                            items!.remove(e);
+
+                                            int totalItems = items.length;
+                                            print(
+                                                'total after removint = $totalItems');
+                                            items.clear();
+
+                                            for (int i = 1;
+                                                i <= totalItems;
+                                                i++) {
+                                              setState(() {
+                                                items.add(i.toString());
+                                              });
+                                            }
+                                            count = items;
+                                            print(count);
+                                            prefs.setStringList('count', count);
+                                          });
+                                        },
+                                        child: const Icon(Icons.delete)),
                                     border: const OutlineInputBorder(),
-                                    hintText: 'Skill no. $e'),
+                                    hintText: 'Add your skill'),
                               ),
                               const SizedBox(
                                 height: 10,
@@ -73,28 +127,20 @@ class _SkillsState extends State<Skills> with AutomaticKeepAliveClientMixin {
                 const SizedBox(
                   height: 20,
                 ),
-                Align(
-                  alignment: AlignmentDirectional.center,
-                  child: TextButton(
-                    onPressed: () {
-                      number++;
-                      setState(() {
-                        count.add(number);
-                        print(count);
-                      });
-                    },
-                    style: IconButton.styleFrom(
-                      elevation: 2,
-                      padding: const EdgeInsets.all(5),
-                      minimumSize: Size.zero,
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: const Icon(Icons.add),
-                  ),
+                RoundButton(
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    List<String>? items = prefs.getStringList('count');
+
+                    int totalItems = items!.length + 1;
+
+                    number = totalItems;
+                    setState(() {
+                      count.add(number.toString());
+                      print(count);
+                    });
+                    await prefs.setStringList('count', count);
+                  },
                 )
               ],
             ),
@@ -128,7 +174,4 @@ class _SkillsState extends State<Skills> with AutomaticKeepAliveClientMixin {
       ),
     ));
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

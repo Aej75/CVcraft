@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cv_app/core/constants/colors.dart';
 import 'package:cv_app/core/widgets/blueprint.dart';
@@ -7,6 +8,8 @@ import 'package:cv_app/features/dashboard/presentation/widgets/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:styled_widget/styled_widget.dart';
+
+import '../../../../core/routes/routes.gr.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -164,7 +167,18 @@ class _HomePageState extends State<HomePage> {
                 height: 30,
               ),
               const CvTitle(title: 'Hot Picks'),
-              const SliderWidget(),
+              SliderWidget(
+                onTap: () {
+                  context.router.push(const EditTempletPageRoute());
+                },
+                images: const [
+                  'https://i0.wp.com/psdfreedownload.com/wp-content/uploads/2017/05/Modern_Simple_Resume_Template_PSD_Full_View.jpg?w=1200&ssl=1',
+                  'https://www.mycvstore.com/wp-content/uploads/2019/02/Professional-CV-MS-Word-Template.jpg',
+                  'https://www.thegreenerleithsocial.org/wp-content/uploads/2019/11/45-free-modern-resume-cv-templates-minimalist-simple-for-microsoft-word-resume-template-free.jpg',
+                  'https://www.resumebuilder.org/wp-content/themes/resumebuilder-theme/images/resumes/Europass-CV-Template-1.png',
+                  'https://i.pinimg.com/originals/0e/6e/15/0e6e150aa3e53e1314a93756532e39ff.gif'
+                ],
+              ),
             ],
           ),
         ),

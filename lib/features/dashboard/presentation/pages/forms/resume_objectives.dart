@@ -26,7 +26,7 @@ class ResumeObjective extends StatelessWidget {
               TopButton(
                 icon: Icons.arrow_forward_ios_rounded,
                 onPressed: () {
-                  context.router.push(const SkillsRoute());
+                  context.router.push(SkillsRoute());
                 },
               ),
             ],
