@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:cv_app/core/routes/routes.gr.dart';
+import 'package:cv_app/core/widgets/app_text_field.dart';
 import 'package:cv_app/core/widgets/blueprint.dart';
 import 'package:cv_app/core/widgets/top_button.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class EditTempletPage extends StatefulWidget {
@@ -42,9 +44,35 @@ class _EditTempletPageState extends State<EditTempletPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // readPdf();
+    readFromDb();
+  }
+
+  final _myBox = Hive.box('myBox');
+
+  readFromDb() async {
+    var response = _myBox.get('personal_details');
+    if (response != null) {
+      _firstName.text = response?['first_name'];
+      _lastName.text = response?['last_name'];
+      _email.text = response?['email'];
+      _city.text = response?['city'];
+      _country.text = response?['country'];
+      _designation.text = response?['designation'];
+    }
+  }
+
+  writeInDb() async {
+    await _myBox.put('personal_details', {
+      'first_name': _firstName.text.isNotEmpty ? _firstName.text : '',
+      'last_name': _lastName.text.isNotEmpty ? _lastName.text : '',
+      'email': _email.text.isNotEmpty ? _email.text : '',
+      'city': _city.text.isNotEmpty ? _city.text : '',
+      'country': _country.text.isNotEmpty ? _country.text : '',
+      'designation': _designation.text.isNotEmpty ? _designation.text : ''
+    });
+
+    print(_myBox.get('personal_details'));
   }
 
   @override
@@ -63,12 +91,14 @@ class _EditTempletPageState extends State<EditTempletPage> {
                 TopButton(
                   icon: Icons.arrow_back_ios_new_rounded,
                   onPressed: () {
-                    Navigator.pop(context); // Pop the current route
+                    context.router.pushAndPopUntil(const HomePageRoute(),
+                        predicate: (route) => false);
                   },
                 ),
                 TopButton(
                   icon: Icons.arrow_forward_ios_rounded,
-                  onPressed: () {
+                  onPressed: () async {
+                    await writeInDb();
                     context.router.push(const ResumeObjectiveRoute());
                   },
                 ),
@@ -80,7 +110,10 @@ class _EditTempletPageState extends State<EditTempletPage> {
                 alignment: AlignmentDirectional.centerStart,
                 child: Text(
                   'Personal\nDetails',
-                  style: TextStyle(fontSize: 55, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      fontSize: 55,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 214, 241, 255)),
                 ),
               ),
             ),
@@ -93,89 +126,74 @@ class _EditTempletPageState extends State<EditTempletPage> {
                   Row(
                     children: [
                       Expanded(
-                          child: TextFormField(
+                          child: AppTextField(
                         controller: _firstName,
-                        decoration: const InputDecoration(
-                            hintText: 'First Name',
-                            border: OutlineInputBorder()),
+                        hintText: 'First Name',
                       )),
                       const SizedBox(
                         width: 10,
                       ),
                       Expanded(
-                          child: TextFormField(
+                          child: AppTextField(
                         controller: _lastName,
-                        decoration: const InputDecoration(
-                            hintText: 'Last Name',
-                            border: OutlineInputBorder()),
+                        hintText: 'Last Name',
                       ))
                     ],
                   ),
-                  TextFormField(
+                  AppTextField(
                     controller: _email,
-                    decoration: const InputDecoration(
-                        hintText: 'Email Address',
-                        border: OutlineInputBorder()),
+                    hintText: 'Email Address',
                   ),
                   Row(
                     children: [
                       Expanded(
-                          child: TextFormField(
+                          child: AppTextField(
                         controller: _country,
-                        decoration: InputDecoration(
-                            hintText: 'Country',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12))),
+                        hintText: 'Country',
                       )),
                       const SizedBox(
                         width: 10,
                       ),
                       Expanded(
-                          child: TextFormField(
+                          child: AppTextField(
                         controller: _city,
-                        decoration: InputDecoration(
-                            hintText: 'City',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12))),
-                      ))
+                        hintText: 'City',
+                      )),
                     ],
                   ),
-                  TextFormField(
+                  AppTextField(
                     controller: _designation,
-                    decoration: InputDecoration(
-                        hintText: 'Designation',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12))),
-                  ),
+                    hintText: 'Designation',
+                  )
                 ],
               ),
             ),
-            const SizedBox(height: 70),
-            Align(
-              alignment: AlignmentDirectional.center,
-              child: SizedBox(
-                height: 80,
-                width: MediaQuery.of(context).size.width / 3,
-                child: TextButton.icon(
-                  onPressed: () {
-                    _formKey.currentState!.save();
-                    context.router.push(const ResumeObjectiveRoute());
-                  },
-                  icon: const Icon(Icons.navigate_next_rounded),
-                  label: const Text(
-                    'Next',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  style: TextButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(color: Colors.black26)),
-                      elevation: 2,
-                      backgroundColor: Colors.white),
-                ),
-              ),
-            )
+            // const SizedBox(height: 70),
+            // Align(
+            //   alignment: AlignmentDirectional.center,
+            //   child: SizedBox(
+            //     height: 80,
+            //     width: MediaQuery.of(context).size.width / 3,
+            //     child: TextButton.icon(
+            //       onPressed: () {
+            //         _formKey.currentState!.save();
+            //         context.router.push(const ResumeObjectiveRoute());
+            //       },
+            //       icon: const Icon(Icons.navigate_next_rounded),
+            //       label: const Text(
+            //         'Next',
+            //         style: TextStyle(fontSize: 18),
+            //       ),
+            //       style: TextButton.styleFrom(
+            //           foregroundColor: Colors.black,
+            //           shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(20),
+            //               side: const BorderSide(color: Colors.black26)),
+            //           elevation: 2,
+            //           backgroundColor: Colors.white),
+            //     ),
+            //   ),
+            // )
           ],
         )),
       ),

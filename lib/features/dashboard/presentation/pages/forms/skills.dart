@@ -28,17 +28,17 @@ class _SkillsState extends State<Skills> {
     final prefs = await SharedPreferences.getInstance();
 
     final List<String>? items = prefs.getStringList('count');
-
-   
-    if (items!.isEmpty) {
+    // prefs.remove('count');
+    if (items == null) {
+      print('empty');
       setState(() {
         count.add(number.toString());
       });
     } else {
       setState(() {
         count = items;
-        print(count);
       });
+      print(count);
     }
   }
 
@@ -86,7 +86,23 @@ class _SkillsState extends State<Skills> {
                             children: [
                               TextFormField(
                                 decoration: InputDecoration(
-                                    suffixIcon: TextButton(
+                                    filled: true,
+                                    fillColor: const Color(0xffF6F6F6),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0)),
+                                      borderSide:
+                                          BorderSide(color: Colors.transparent),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0)),
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    suffixIcon: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: RoundButton(
                                         onPressed: () async {
                                           final prefs = await SharedPreferences
                                               .getInstance();
@@ -94,11 +110,12 @@ class _SkillsState extends State<Skills> {
                                               prefs.getStringList('count');
 
                                           setState(() {
+                                            count.remove(e);
                                             items!.remove(e);
 
                                             int totalItems = items.length;
                                             print(
-                                                'total after removint = $totalItems');
+                                                'total after removing = $totalItems');
                                             items.clear();
 
                                             for (int i = 1;
@@ -113,7 +130,12 @@ class _SkillsState extends State<Skills> {
                                             prefs.setStringList('count', count);
                                           });
                                         },
-                                        child: const Icon(Icons.delete)),
+                                        iconData: const Icon(
+                                          Icons.delete,
+                                          size: 15,
+                                        ),
+                                      ),
+                                    ),
                                     border: const OutlineInputBorder(),
                                     hintText: 'Add your skill'),
                               ),
@@ -132,7 +154,7 @@ class _SkillsState extends State<Skills> {
                     final prefs = await SharedPreferences.getInstance();
                     List<String>? items = prefs.getStringList('count');
 
-                    int totalItems = items!.length + 1;
+                    int totalItems = items == null ? 2 : items.length + 1;
 
                     number = totalItems;
                     setState(() {
@@ -145,31 +167,31 @@ class _SkillsState extends State<Skills> {
               ],
             ),
           ),
-          SizedBox(
-            height: 100,
-            child: Align(
-              alignment: AlignmentDirectional.bottomCenter,
-              child: SizedBox(
-                height: 80,
-                width: MediaQuery.of(context).size.width / 3,
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.navigate_next_rounded),
-                  label: const Text(
-                    'Next',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  style: TextButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(color: Colors.black26)),
-                      elevation: 2,
-                      backgroundColor: Colors.white),
-                ),
-              ),
-            ),
-          )
+          // SizedBox(
+          //   height: 100,
+          //   child: Align(
+          //     alignment: AlignmentDirectional.bottomCenter,
+          //     child: SizedBox(
+          //       height: 80,
+          //       width: MediaQuery.of(context).size.width / 3,
+          //       child: TextButton.icon(
+          //         onPressed: () {},
+          //         icon: const Icon(Icons.navigate_next_rounded),
+          //         label: const Text(
+          //           'Next',
+          //           style: TextStyle(fontSize: 18),
+          //         ),
+          //         style: TextButton.styleFrom(
+          //             foregroundColor: Colors.black,
+          //             shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.circular(20),
+          //                 side: const BorderSide(color: Colors.black26)),
+          //             elevation: 2,
+          //             backgroundColor: Colors.white),
+          //       ),
+          //     ),
+          //   ),
+          // )
         ],
       ),
     ));

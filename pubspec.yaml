@@ -39,8 +39,14 @@ dependencies:
   zoom_widget: ^2.0.0
   flutter_html: ^3.0.0-alpha.5
   pdf: ^3.8.4
-  
+  flutter_html_to_pdf: ^0.7.0
+  android_path_provider: ^0.3.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+
 dev_dependencies:
+  hive_generator: ^1.1.1
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0

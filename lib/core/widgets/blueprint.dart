@@ -27,7 +27,7 @@ class BaseView extends StatelessWidget {
     this.resizeToAvoidBottomInset = true,
     this.onBackCallback,
     this.bottomSheet,
-    this.padding = const EdgeInsets.all(16.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 10),
     this.actions = const [],
     this.bottomNavigationBar,
     this.bottomWidget,
@@ -43,6 +43,7 @@ class BaseView extends StatelessWidget {
         child: SafeArea(
           minimum: const EdgeInsets.only(top: 8, bottom: 0),
           child: Scaffold(
+            backgroundColor: const Color(0xff508D86),
             bottomNavigationBar: bottomNavigationBar,
             bottomSheet: bottomSheet,
             resizeToAvoidBottomInset: resizeToAvoidBottomInset,

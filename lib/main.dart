@@ -1,12 +1,18 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cv_app/core/routes/routes.gr.dart';
-import 'package:cv_app/features/onboarding/presentation/bloc/first_time_status_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/adapters.dart';
+
+import 'features/onboarding/presentation/bloc/first_time_status_bloc.dart';
 
 final getIt = GetIt.instance;
-
+late Box box;
 void main() async {
+  await Hive.initFlutter();
+
+  var box = await Hive.openBox('myBox');
+
   getIt.registerSingleton<AppRouter>(AppRouter());
   getIt.registerSingleton<FirstTimeStatusBloc>(FirstTimeStatusBloc());
 
