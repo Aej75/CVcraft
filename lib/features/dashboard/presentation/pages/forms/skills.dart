@@ -17,6 +17,10 @@ class Skills extends StatefulWidget {
 class _SkillsState extends State<Skills> {
   int number = 1;
   List<String> count = [];
+
+  TextEditingController controller = TextEditingController();
+
+  final List<TextEditingController> controllerList = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -28,15 +32,20 @@ class _SkillsState extends State<Skills> {
     final prefs = await SharedPreferences.getInstance();
 
     final List<String>? items = prefs.getStringList('count');
+    // items?.clear();
     // prefs.remove('count');
     if (items == null) {
       print('empty');
       setState(() {
         count.add(number.toString());
+        // controllerList.add(controller);
       });
     } else {
       setState(() {
         count = items;
+        for (int i = 0; i < items.length; i++) {
+          controllerList.add(TextEditingController());
+        }
       });
       print(count);
     }
@@ -80,11 +89,14 @@ class _SkillsState extends State<Skills> {
             child: Column(
               children: [
                 Column(
-                    children: count
-                        .map(
-                          (e) => Column(
+                  children: [
+                    Column(
+                      children: [
+                        for (int i = 0; i < count.length; i++)
+                          Column(
                             children: [
                               TextFormField(
+                                controller: controllerList[i],
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: const Color(0xffF6F6F6),
@@ -110,21 +122,45 @@ class _SkillsState extends State<Skills> {
                                               prefs.getStringList('count');
 
                                           setState(() {
-                                            count.remove(e);
-                                            items!.remove(e);
+                                            count.remove(i.toString());
+                                            items!.remove(i.toString());
+
+                                            if (controllerList.length > 1) {
+                                              controllerList
+                                                  .remove(controllerList[i]);
+                                            }
+
+                                            int totalController =
+                                                controllerList.length;
 
                                             int totalItems = items.length;
+
                                             print(
-                                                'total after removing = $totalItems');
+                                                'Total Controller after removin=$totalController');
+                                            // print(
+                                            //     'total after removing = $totalItems');
                                             items.clear();
+                                            controllerList.clear();
 
                                             for (int i = 1;
                                                 i <= totalItems;
                                                 i++) {
                                               setState(() {
+                                                controllerList.add(
+                                                    TextEditingController());
                                                 items.add(i.toString());
                                               });
                                             }
+                                            // for (int i = 1;
+                                            //     i <= totalItems;
+                                            //     i++) {
+                                            //   setState(() {
+                                            //     controllerList.add(
+                                            //         TextEditingController());
+                                            //     items.add(i.toString());
+                                            //   });
+                                            // }
+                                            // print(_controller);
                                             count = items;
                                             print(count);
                                             prefs.setStringList('count', count);
@@ -144,8 +180,10 @@ class _SkillsState extends State<Skills> {
                               )
                             ],
                           ),
-                        )
-                        .toList()),
+                      ],
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -159,6 +197,8 @@ class _SkillsState extends State<Skills> {
                     number = totalItems;
                     setState(() {
                       count.add(number.toString());
+                      controllerList.add(TextEditingController());
+                      // print(controllerList);
                       print(count);
                     });
                     await prefs.setStringList('count', count);
