@@ -3,6 +3,7 @@ import 'package:cv_app/core/routes/routes.gr.dart';
 import 'package:cv_app/core/widgets/blueprint.dart';
 import 'package:cv_app/core/widgets/roundBotton.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/widgets/top_button.dart';
@@ -18,14 +19,39 @@ class _SkillsState extends State<Skills> {
   int number = 1;
   List<String> count = [];
 
-  TextEditingController controller = TextEditingController();
-
   final List<TextEditingController> controllerList = [];
+  final List<TextField> _fields = [];
+
+  final List<String> controllerData = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCount();
+    readFromDb();
+  }
+
+  final _myBox = Hive.box('myBox');
+
+  readFromDb() async {
+    var response = await _myBox.get('skills');
+    print('data on skill database =$response');
+    if (response != null) {
+      for (int i = 0; i < controllerList.length; i++) {
+        controllerList[i].text = response[i].toString();
+      }
+    }
+  }
+
+  writeInDb() async {
+    controllerData.clear();
+    for (int i = 0; i < controllerList.length; i++) {
+      controllerData.add(controllerList[i].text);
+
+      await _myBox.put('skills', controllerData);
+    }
+
+    print(_myBox.get('skills'));
   }
 
   Future getCount() async {
@@ -53,6 +79,9 @@ class _SkillsState extends State<Skills> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
+
+    TextFormField field;
     return BaseView(
         body: SingleChildScrollView(
       child: Column(
@@ -62,14 +91,16 @@ class _SkillsState extends State<Skills> {
             children: [
               TopButton(
                 icon: Icons.arrow_back_ios_new_rounded,
-                onPressed: () {
+                onPressed: () async {
+                  await writeInDb();
                   context.router.push(
                       const ResumeObjectiveRoute()); // Pop the current route
                 },
               ),
               TopButton(
                 icon: Icons.arrow_forward_ios_rounded,
-                onPressed: () {
+                onPressed: () async {
+                  await writeInDb();
                   context.router.push(const ExperiencePageRoute());
                 },
               ),
@@ -124,14 +155,22 @@ class _SkillsState extends State<Skills> {
                                           setState(() {
                                             count.remove(i.toString());
                                             items!.remove(i.toString());
-
-                                            if (controllerList.length > 1) {
-                                              controllerList
-                                                  .remove(controllerList[i]);
-                                            }
+                                            // ignore: list_remove_unrelated_type
+                                            controllerData.clear();
+                                            controllerList
+                                                .remove(controllerList[i]);
 
                                             int totalController =
                                                 controllerList.length;
+
+                                            for (int i = 0;
+                                                i < totalController;
+                                                i++) {
+                                              controllerData
+                                                  .add(controllerList[i].text);
+                                            }
+
+                                            print(controllerData);
 
                                             int totalItems = items.length;
 
@@ -140,14 +179,15 @@ class _SkillsState extends State<Skills> {
                                             // print(
                                             //     'total after removing = $totalItems');
                                             items.clear();
-                                            controllerList.clear();
+                                            // controllerList.clear();
 
-                                            for (int i = 1;
-                                                i <= totalItems;
+                                            for (int i = 0;
+                                                i < totalItems;
                                                 i++) {
                                               setState(() {
-                                                controllerList.add(
-                                                    TextEditingController());
+                                                // controllerList.add(
+                                                //     TextEditingController());
+
                                                 items.add(i.toString());
                                               });
                                             }
@@ -192,15 +232,19 @@ class _SkillsState extends State<Skills> {
                     final prefs = await SharedPreferences.getInstance();
                     List<String>? items = prefs.getStringList('count');
 
-                    int totalItems = items == null ? 2 : items.length + 1;
-
-                    number = totalItems;
                     setState(() {
-                      count.add(number.toString());
-                      controllerList.add(TextEditingController());
+                      controllerList.add(controller);
+
+                      count.add(items!.length.toString());
                       // print(controllerList);
                       print(count);
                     });
+
+                    for (int i = 0; i < controllerList.length; i++) {
+                      controllerData.add(controllerList[i].text);
+                    }
+                    print(controllerData);
+
                     await prefs.setStringList('count', count);
                   },
                 )
