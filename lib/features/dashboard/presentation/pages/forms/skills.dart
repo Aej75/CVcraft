@@ -20,7 +20,6 @@ class _SkillsState extends State<Skills> {
   List<String> count = [];
 
   final List<TextEditingController> controllerList = [];
-  final List<TextField> _fields = [];
 
   final List<String> controllerData = [];
   @override
@@ -239,6 +238,8 @@ class _SkillsState extends State<Skills> {
                       // print(controllerList);
                       print(count);
                     });
+
+                    controllerData.clear();
 
                     for (int i = 0; i < controllerList.length; i++) {
                       controllerData.add(controllerList[i].text);
